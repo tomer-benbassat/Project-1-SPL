@@ -32,6 +32,7 @@ AudioTrack::AudioTrack(const std::string& title, const std::vector<std::string>&
 
 AudioTrack::~AudioTrack() {
     // TODO: Implement the destructor
+    //deleted the pointer field
     #ifdef DEBUG
     std::cout << "AudioTrack destructor called for: " << title << std::endl;
     #endif
