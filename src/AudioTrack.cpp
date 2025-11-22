@@ -44,6 +44,7 @@ duration_seconds(other.duration_seconds),bpm(other.bpm),waveform_size(other.wave
 waveform_data(nullptr)
 {
     // TODO: Implement the copy constructor
+    //done. allocate memory for pointer field
     #ifdef DEBUG
     std::cout << "AudioTrack copy constructor called for: " << other.title << std::endl;
     #endif
@@ -56,6 +57,7 @@ waveform_data(nullptr)
 
 AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     // TODO: Implement the copy assignment operator
+    //done. delete current memory for pointer field + allocate new memory and deep copy from other.
     #ifdef DEBUG
     std::cout << "AudioTrack copy assignment called for: " << other.title << std::endl;
     #endif
@@ -65,7 +67,8 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
         duration_seconds=other.duration_seconds;
         bpm=other.bpm;
         waveform_size=other.waveform_size;
-        delete[] waveform_data;
+        delete[] waveform_data; //delete current data
+         //assign new data using deep copy for pointer field
         waveform_data = new double[waveform_size];
         for (size_t i = 0; i < waveform_size; i++) {
             waveform_data[i] = other.waveform_data[i];
@@ -77,11 +80,14 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
 /*make sure to use std::move on expensive to create objects*/
 AudioTrack::AudioTrack(AudioTrack&& other) noexcept : title(std::move(other.title)),
 artists(std::move(other.artists)),duration_seconds(other.duration_seconds),bpm(other.bpm),
-waveform_size(other.waveform_size),waveform_data(other.waveform_data) {
+waveform_size(other.waveform_size),
+//steal rvalue memory:
+waveform_data(other.waveform_data) {
     // TODO: Implement the move constructor
     #ifdef DEBUG
     std::cout << "AudioTrack move constructor called for: " << other.title << std::endl;
     #endif
+    //empty the source
     other.waveform_data=nullptr;
     other.waveform_size=0;
 }
@@ -93,6 +99,7 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
     std::cout << "AudioTrack move assignment called for: " << other.title << std::endl;
     #endif
     if(&other!=this){
+        //deallocate
         delete[] waveform_data;
         /*use std::move on expensive to create stractures (String,Vector)*/
         title=std::move(other.title);
@@ -100,9 +107,9 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
         duration_seconds=other.duration_seconds;
         bpm=other.bpm;
         waveform_size=other.waveform_size;
-        /*copy the pointer*/
+        /*copy the pointer "steal"*/
         waveform_data = other.waveform_data;
-        /*make sure old one cant access it*/
+        //make sure old one cant access it "empty"
         other.waveform_data=nullptr;
         other.waveform_size=0;
     }
