@@ -12,6 +12,11 @@
  * On HIT: touch MRU (most recently used); on MISS: insert; if full, evict LRU.
  * - Mixer always receives a polymorphic clone; cache retains its copy.
  */
+
+ /*
+ HIT: the track already in the cache
+ MISS: it DOES NOT
+ */
 class DJControllerService {
 public:
     // Construct with a given cache size

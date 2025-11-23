@@ -18,7 +18,25 @@ AudioTrack* LRUCache::get(const std::string& track_id) {
  * TODO: Implement the put() method for LRUCache
  */
 bool LRUCache::put(PointerWrapper<AudioTrack> track) {
-    return false; // Placeholder
+    if(!track) return;
+    size_t index = findSlot(track.get()->get_title());
+    if(index!=max_size){ //track with the smae title already exists
+        slots[index].access(++access_counter); //update acceess time
+        return false;
+    }
+    bool eviction = false;
+    if(isFull()) {
+        evictLRU();
+        eviction = true; 
+    }
+    int emptySlot = findEmptySlot();
+    //we must use rvalue for this bc we dleted copy constructors bc it damages all wrap idea.
+    //so we use std::move (which showed in tirgul prsentation and took me only 20 minutes to find :))))
+    //std::move convert lvalue aka track to rvalue in order for us to use move constructor of PointerWrapper as we should
+    //store function already update access time to access counter and mark occupied flag
+    //++ AC before storing it in order to keep LRU model
+    slots[emptySlot].store(std::move(track),++access_counter); 
+    return eviction;
 }
 
 bool LRUCache::evictLRU() {
@@ -64,7 +82,15 @@ size_t LRUCache::findSlot(const std::string& track_id) const {
  * TODO: Implement the findLRUSlot() method for LRUCache
  */
 size_t LRUCache::findLRUSlot() const {
-    return 0; // Placeholder
+    uint64_t min = access_counter;
+    size_t index=max_size;
+    for(int i=0;i<slots.size();i++){
+       if(slots[i].isOccupied() && slots[i].getLastAccessTime()<min){
+         min = slots[i].getLastAccessTime();
+         index=i;
+       }
+    }
+    return index;
 }
 
 size_t LRUCache::findEmptySlot() const {
