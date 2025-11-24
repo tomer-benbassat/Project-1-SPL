@@ -32,8 +32,8 @@ private:
 
     // Service-oriented architecture: delegate to services
     DJLibraryService library_service;
-    DJControllerService controller_service;
-    MixingEngineService mixing_service;
+    DJControllerService controller_service; //cache
+    MixingEngineService mixing_service; //decks
     
     // Configuration and session state
     ConfigurationManager config_manager;
@@ -101,6 +101,14 @@ public:
     const std::string& get_session_name() const { return session_name; }
 
     // TODO: Add more status and display methods as needed, delegating to services
+
+
+    // ========== helper Function ========== 
+    /*input: playlist title
+     * operates phase4,7.3.4 -> 4.(c) aka all the operations we need to do for each playlist
+     */
+    void DJSession::for_each_selected_playlist(const std::string& playlist_title);
+
 
 private:
     // ========== PROVIDED HELPER METHODS (Menu and Config) ==========

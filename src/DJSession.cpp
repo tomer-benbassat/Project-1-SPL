@@ -63,9 +63,24 @@ bool DJSession::load_playlist(const std::string& playlist_name)  {
 
  */
 int DJSession::load_track_to_controller(const std::string& track_name) {
-    // Your implementation here
-    return 0; // Placeholder
+    AudioTrack* track = library_service.findTrack(track_name);
+    if(!track){ //not found
+        std::cout << "[ERROR] Track: '" << track_name << "' not found in library\n";
+        stats.errors ++;
+        return 0;
+    }
+    std::cout << "[System] Loading track: '"<< track_name << "' to controller...\n";
+    int output = controller_service.loadTrackToCache(*track);
+    if(output==1) { stats.cache_hits++; }
+    if(output==0) { stats.cache_misses++; }
+    if(output==-1) { 
+        stats.cache_misses++;
+        stats.cache_evictions++;
+    }
+    return output;
 }
+
+
 
 /**
  * TODO: Implement load_track_to_mixer_deck method
@@ -75,9 +90,49 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
  */
 bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
     std::cout << "[System] Delegating track transfer to MixingEngineService for: " << track_title << std::endl;
-    // your implementation here
-    return false; // Placeholder
+    AudioTrack* track = controller_service.getTrackFromCache(track_title);
+    if(!track){
+        std::cout << "[ERROR] Track: '" << track_title << "' not found in cache\n";
+        stats.errors ++;
+        return false;
+    }
+    int output = mixing_service.loadTrackToDeck(*track);
+    if(output==0){
+        stats.deck_loads_a++;
+        stats.transitions++;
+    }
+    if(output==1){
+        stats.deck_loads_b++;
+        stats.transitions++;
+    }
+    if(output==-1){
+        std::cout << "[ERROR] Track: '" << track_title << "' failed to load \n";
+        stats.errors ++;
+        return false;
+    }
+    std::cout << "[System] Track: '" << track_title << "' successfully loaded to deck: "<< output << "\n";
+    return true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * @brief Main simulation loop that orchestrates the DJ performance session.
@@ -106,10 +161,75 @@ void DJSession::simulate_dj_performance() {
     std::cout << "Auto Sync: " << (session_config.auto_sync ? "enabled" : "disabled") << std::endl;
     std::cout << "Cache Capacity: " << session_config.controller_cache_size << " slots (LRU policy)" << std::endl;
     std::cout << "\n--- Processing Tracks ---" << std::endl;
+    //my implementation:
+    std::vector<std::string> extracted_titles;//playlists names
+    std::string user_selection;
+    if(play_all){
+        for(const auto& [title,index] : session_config.playlists){ //extraction
+            extracted_titles.push_back(title);
+        }
+        for(int i=0;i<extracted_titles.size() ;i++){
+            for_each_selected_playlist(extracted_titles[i]); //see helper function below
+        }
+            
+    }
+    else{ //interactive mode
+        user_selection = display_playlist_menu_from_config();
+        while(user_selection!="0"){
+            if(user_selection=="") { break; }
+            for_each_selected_playlist(user_selection);
+            user_selection = display_playlist_menu_from_config();
+        }
+    }
+    std::cout << "Session cancelled by user or all playlists played." << std::endl;
+ }
 
-    std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
-    // Your implementation here
-}
+
+
+ //helperfunction
+ //input: playlist title
+ //the function operates phase4,7.3.4 -> 4.(c) aka all the operations we need to do for each playlist aka load it to all services
+    void DJSession::for_each_selected_playlist(const std::string& playlist_title){
+        if(!load_playlist(playlist_title)){
+            std::cout << "[ERROR]: load playliat: '"<< playlist_title << "' failed" << std::endl;
+            return;
+        }
+        for(auto title : track_titles){
+            std::cout << "\n–- Processing: " << title << " –-" << std::endl;
+            stats.tracks_processed++;
+            //cache
+            //reminder: load track to controoler output: 
+            //HIT (1) 
+            //MISS (0).
+            //MISS & eviction (-1)
+            int output = load_track_to_controller(title);
+            if(output==1) { stats.cache_hits++; }
+            if(output==0) { stats.cache_misses++; }
+            if(output==-1) { 
+                stats.cache_misses++;
+                stats.cache_evictions++;
+            }
+            //deck loading:
+            int output = load_track_to_mixer_deck(title);
+            if(output==0){
+                stats.deck_loads_a++;
+                stats.transitions++;
+            }
+            if(output==1){
+                stats.deck_loads_b++;
+                stats.transitions++;
+            }
+        }
+        print_session_summary();
+        stats.tracks_processed = 0;
+        stats.cache_hits = 0;
+        stats.cache_misses = 0;
+        stats.cache_evictions = 0;
+        stats.deck_loads_a = 0;
+        stats.deck_loads_b = 0;
+        stats.transitions = 0;
+        stats.errors = 0;
+    }
 
 
 /* 

@@ -18,7 +18,7 @@ DJLibraryService::DJLibraryService(const Playlist& playlist)
  */
 //Done
 //MYNOTE: notice this services own tracks therfore we allocated memory for tracks. 
-//good thing we deleted it in the destructor of Audio track
+//***********im not sure if destructor of audiotrack is suufienct here, or we might need implement destructor in this class***************
 void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>& library_tracks) {
     //Todo: Implement buildLibrary method
     for(int i=0;i<library_tracks.size();i++){
@@ -118,5 +118,5 @@ std::vector<std::string> DJLibraryService::getTrackTitles() const {
     for(int i=0;i<playlist.get_track_count();i++){
         output.push_back(tracks[i]->get_title());
     }
-    return output; // Placeholder
+    return output; 
 }
