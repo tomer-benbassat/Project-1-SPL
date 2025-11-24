@@ -103,11 +103,7 @@ public:
     // TODO: Add more status and display methods as needed, delegating to services
 
 
-    // ========== helper Function ========== 
-    /*input: playlist title
-     * operates phase4,7.3.4 -> 4.(c) aka all the operations we need to do for each playlist
-     */
-    void DJSession::for_each_selected_playlist(const std::string& playlist_title);
+
 
 
 private:
@@ -128,4 +124,10 @@ private:
      * @brief Print final session summary with statistics
      */
     void print_session_summary() const;
+
+        // ========== helper Function ========== 
+    /*input: playlist title
+     * operates phase4,7.3.4 -> 4.(c) aka all the operations we need to do for each playlist
+     */
+    void for_each_selected_playlist(const std::string& playlist_title);
 };

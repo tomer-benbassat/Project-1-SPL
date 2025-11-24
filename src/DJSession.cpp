@@ -189,7 +189,7 @@ void DJSession::simulate_dj_performance() {
  //helperfunction
  //input: playlist title
  //the function operates phase4,7.3.4 -> 4.(c) aka all the operations we need to do for each playlist aka load it to all services
-    void DJSession::for_each_selected_playlist(const std::string& playlist_title){
+    void DJSession:: for_each_selected_playlist(const std::string& playlist_title){
         if(!load_playlist(playlist_title)){
             std::cout << "[ERROR]: load playliat: '"<< playlist_title << "' failed" << std::endl;
             return;
@@ -210,12 +210,12 @@ void DJSession::simulate_dj_performance() {
                 stats.cache_evictions++;
             }
             //deck loading:
-            int output = load_track_to_mixer_deck(title);
-            if(output==0){
+            int result = load_track_to_mixer_deck(title);
+            if(result==0){
                 stats.deck_loads_a++;
                 stats.transitions++;
             }
-            if(output==1){
+            if(result==1){
                 stats.deck_loads_b++;
                 stats.transitions++;
             }

@@ -186,10 +186,10 @@ int main(int argc, char* argv[]) {
         std::cout << "Initially, many features will be incomplete!" << std::endl;
         std::cout << "==================================================" << std::endl;
         
-        // Test each phase individually
-       //test_phase_1_memory_leaks();
-        //test_phase_2_rule_of_5();
-       // test_phase_3();
+        //Test each phase individually
+       test_phase_1_memory_leaks();
+        test_phase_2_rule_of_5();
+       test_phase_3();
         demonstrate_polymorphism();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
     }
