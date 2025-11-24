@@ -11,8 +11,9 @@
 // - The previously active deck becomes finished and is unloaded immediately.
 class MixingEngineService {
 private:
-    AudioTrack* decks[2];
-    size_t active_deck;
+    AudioTrack* decks[2]; //raw pointers
+    size_t active_deck; //which track is currently playing
+    //mixing behavior
     bool auto_sync;
     int bpm_tolerance;
 public:
