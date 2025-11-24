@@ -18,7 +18,7 @@ AudioTrack* LRUCache::get(const std::string& track_id) {
  * TODO: Implement the put() method for LRUCache
  */
 bool LRUCache::put(PointerWrapper<AudioTrack> track) {
-    if(!track) return;
+    if(!track) return false;
     size_t index = findSlot(track.get()->get_title());
     if(index!=max_size){ //track with the smae title already exists
         slots[index].access(++access_counter); //update acceess time

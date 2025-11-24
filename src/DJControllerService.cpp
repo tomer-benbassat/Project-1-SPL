@@ -53,3 +53,4 @@ AudioTrack* DJControllerService::getTrackFromCache(const std::string& track_titl
     AudioTrack* track = cache.get(track_title);
     if(!track){ return nullptr; }
     return track; 
+}
