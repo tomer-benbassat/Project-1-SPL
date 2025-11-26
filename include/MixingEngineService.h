@@ -19,6 +19,17 @@ private:
 public:
     MixingEngineService();
     ~MixingEngineService();
+    
+//==================addition: rule of 5======================
+    //explaination: deleted these since they arent neccessary.
+    //each session has only one of these services
+     //copy of this service would be very expensive in terms of memory
+     MixingEngineService(MixingEngineService& other) = delete;
+     MixingEngineService& operator=(const MixingEngineService& other) = delete;
+     MixingEngineService(MixingEngineService&& other) noexcept = delete;
+     MixingEngineService& operator=(MixingEngineService&& other) = delete;
+//==================addition: rule of 5======================
+
 
     /** Contract: Load a track to the next deck per instant-transition policy
      * - @param track: reference to a cached track to be cloned for the mixer

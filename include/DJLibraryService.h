@@ -49,6 +49,19 @@ public:
      */
     std::vector<std::string> getTrackTitles() const;
 
+//==================addition:destructor & rule of 5======================
+  ~DJLibraryService();
+
+  //explaination: deleted these since they arent neccessary.
+  //each session has only one of these services
+  //copy of this service would be very expensive in terms of memory
+  DJLibraryService(const DJLibraryService& other) = delete;
+  DJLibraryService& operator=(const DJLibraryService& other) = delete;
+  DJLibraryService(DJLibraryService&& other) noexcept = delete;
+  DJLibraryService& operator=(DJLibraryService&& other) = delete;
+//==================addition:destructor & rule of 5======================
+
+
 private:
     Playlist playlist;
     std::vector<AudioTrack*> library;  // Library of all tracks (owned)

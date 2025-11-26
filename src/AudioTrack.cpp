@@ -40,8 +40,7 @@ AudioTrack::~AudioTrack() {
 }
 
 AudioTrack::AudioTrack(const AudioTrack& other): title(other.title),artists(other.artists),
-duration_seconds(other.duration_seconds),bpm(other.bpm),waveform_size(other.waveform_size),
-waveform_data(nullptr)
+duration_seconds(other.duration_seconds),bpm(other.bpm),waveform_data(nullptr), waveform_size(other.waveform_size)
 {
     // TODO: Implement the copy constructor
     //done. allocate memory for pointer field
@@ -55,6 +54,7 @@ waveform_data(nullptr)
     waveform_data = clone;
 }
 
+
 AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
     // TODO: Implement the copy assignment operator
     //done. delete current memory for pointer field + allocate new memory and deep copy from other.
@@ -66,23 +66,23 @@ AudioTrack& AudioTrack::operator=(const AudioTrack& other) {
         artists=other.artists;
         duration_seconds=other.duration_seconds;
         bpm=other.bpm;
-        waveform_size=other.waveform_size;
         delete[] waveform_data; //delete current data
          //assign new data using deep copy for pointer field
         waveform_data = new double[waveform_size];
         for (size_t i = 0; i < waveform_size; i++) {
             waveform_data[i] = other.waveform_data[i];
         }
+        waveform_size = other.waveform_size;
 
     }
     return *this;
 }
+
 /*make sure to use std::move on expensive to create objects*/
 AudioTrack::AudioTrack(AudioTrack&& other) noexcept : title(std::move(other.title)),
-artists(std::move(other.artists)),duration_seconds(other.duration_seconds),bpm(other.bpm),
-waveform_size(other.waveform_size),
-//steal rvalue memory:
-waveform_data(other.waveform_data) {
+artists(std::move(other.artists)),duration_seconds(other.duration_seconds),bpm(other.bpm),waveform_data(other.waveform_data),
+waveform_size(other.waveform_size)
+ {
     // TODO: Implement the move constructor
     #ifdef DEBUG
     std::cout << "AudioTrack move constructor called for: " << other.title << std::endl;
@@ -106,9 +106,9 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
         artists=std::move(other.artists);
         duration_seconds=other.duration_seconds;
         bpm=other.bpm;
-        waveform_size=other.waveform_size;
-        /*copy the pointer "steal"*/
+          /*copy the pointer "steal"*/
         waveform_data = other.waveform_data;
+        waveform_size=other.waveform_size;
         //make sure old one cant access it "empty"
         other.waveform_data=nullptr;
         other.waveform_size=0;

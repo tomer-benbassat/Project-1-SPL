@@ -115,25 +115,6 @@ bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * @brief Main simulation loop that orchestrates the DJ performance session.
  * @note Updates session statistics (stats) throughout processing
@@ -165,10 +146,10 @@ void DJSession::simulate_dj_performance() {
     std::vector<std::string> extracted_titles;//playlists names
     std::string user_selection;
     if(play_all){
-        for(const auto& [title,index] : session_config.playlists){ //extraction
-            extracted_titles.push_back(title);
+        for(const auto& pair : session_config.playlists){ //extraction
+            extracted_titles.push_back(pair.first);
         }
-        for(int i=0;i<extracted_titles.size() ;i++){
+        for(size_t i=0;i<extracted_titles.size() ;i++){
             for_each_selected_playlist(extracted_titles[i]); //see helper function below
         }
             

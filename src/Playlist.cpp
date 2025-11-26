@@ -21,6 +21,42 @@ Playlist::~Playlist() {
         current = next;
     }
 }
+//=========================rule of 3 addition============================ 
+//copy constructor
+//added it in the end. really cant find a way to implement this without PW so i find it weird they asked us this in phase 1 but fine. 
+Playlist::Playlist(const Playlist& other):head(nullptr),playlist_name(other.playlist_name),track_count(other.track_count){
+    PlaylistNode* current = other.head;
+    while(current){
+        PointerWrapper<AudioTrack> cloned_wrapper = current->track->clone();
+        AudioTrack* cloned_raw = cloned_wrapper.release();
+        add_track(cloned_raw);
+        current = current->next;
+    }
+}
+
+//Assigment Operator
+Playlist& Playlist::operator=(const Playlist& other){
+    if(this!=&other){
+        playlist_name = other.playlist_name;
+        track_count = other.track_count;
+        //clear:
+        while(head){
+            PlaylistNode* to_delete = head;
+            head = head->next;
+            delete to_delete->track;
+            delete to_delete;
+        }
+        PlaylistNode* current = other.head;
+        while(current){
+            PointerWrapper<AudioTrack> cloned_wrapper = current->track->clone();
+            AudioTrack* cloned_raw = cloned_wrapper.release();
+            add_track(cloned_raw);
+            current = current->next;
+         }
+    }
+    return *this;
+}
+//=========================rule of 3 addition============================ 
 
 void Playlist::add_track(AudioTrack* track) {
     if (!track) {

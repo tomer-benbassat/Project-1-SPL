@@ -40,6 +40,20 @@ public:
      */
     ~Playlist();
 
+//=========================rule of 3 addition============================   
+//important since in phase 4 ->djLibrary->loadplaylistfromindices we assign playlist 
+//in this assigment there is no use to move semnatics since we assign playlist once and using lvalue
+    /**
+     * Copy Constructor
+     */
+    Playlist(const Playlist& other);
+     
+    /**
+     * Assigment Operator
+     */
+    Playlist& operator=(const Playlist& other);
+//=========================rule of 3 addition============================     
+
     /**
      * Add a track to the playlist
      * @param track Pointer to AudioTrack to add

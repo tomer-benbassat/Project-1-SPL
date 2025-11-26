@@ -10,7 +10,16 @@
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
     : playlist(playlist) {}
 
-
+//==================addition:destructor======================
+  DJLibraryService::~DJLibraryService(){
+    //playlist alray has destructor
+    //library
+    for(size_t i=0;i<library.size();i++){
+        delete library[i];
+    }
+    //library vector seleted by default
+  }
+//==================addition:destructor======================
 
 /**
  * @brief Load a playlist from track indices referencing the library
@@ -18,10 +27,9 @@ DJLibraryService::DJLibraryService(const Playlist& playlist)
  */
 //Done
 //MYNOTE: notice this services own tracks therfore we allocated memory for tracks. 
-//***********im not sure if destructor of audiotrack is suufienct here, or we might need implement destructor in this class***************
 void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>& library_tracks) {
     //Todo: Implement buildLibrary method
-    for(int i=0;i<library_tracks.size();i++){
+    for(size_t i=0;i<library_tracks.size();i++){
         SessionConfig::TrackInfo current_info = library_tracks[i];
         if(current_info.type == "MP3"){
             library.push_back(new MP3Track(current_info.title,current_info.artists, current_info.duration_seconds,current_info.bpm, current_info.extra_param1, current_info.extra_param2));
@@ -84,8 +92,8 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
                                                const std::vector<int>& track_indices) {
    std::cout << "[INFO] Loading playlist:" << playlist_name << "\n";
    playlist = Playlist(playlist_name);
-   for(int i=0;i< track_indices.size();i++){
-        int index = track_indices[i];
+   for(size_t i=0;i< track_indices.size();i++){
+        size_t index = track_indices[i];
         if(index>library.size()||index < 1){
            std::cout << "[WARNING] Invalid track index:" << index << "\n"; 
         }
