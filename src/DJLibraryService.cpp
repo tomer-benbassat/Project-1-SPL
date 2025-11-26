@@ -8,7 +8,7 @@
 
 //constructor
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
-    : playlist(playlist) {}
+    : playlist(playlist), library() {} 
 
 //==================addition:destructor======================
   DJLibraryService::~DJLibraryService(){
@@ -33,14 +33,12 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
         SessionConfig::TrackInfo current_info = library_tracks[i];
         if(current_info.type == "MP3"){
             library.push_back(new MP3Track(current_info.title,current_info.artists, current_info.duration_seconds,current_info.bpm, current_info.extra_param1, current_info.extra_param2));
-            std::cout << "MP3Track created:" << current_info.extra_param1 << "kbps";
         }
         else{
             library.push_back(new WAVTrack(current_info.title,current_info.artists, current_info.duration_seconds,current_info.bpm, current_info.extra_param1, current_info.extra_param2));
-            std::cout << "WAVTrack created:" << current_info.extra_param1 <<"HZ/" << current_info.extra_param2<< "bit";
         }
     }
-    std::cout << "[INFO] Track library built: " << library.size() << "tracks loaded";
+    std::cout << "[INFO] Track library built: " << library.size() << "tracks loaded\n";
 }
 
 

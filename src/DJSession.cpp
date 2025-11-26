@@ -9,7 +9,16 @@
 
 
 DJSession::DJSession(const std::string& name, bool play_all)
-    : session_name(name), play_all(play_all) {
+    : session_name(name),
+    library_service(),
+    controller_service(),
+    mixing_service(),
+    config_manager(),
+    session_config(),
+    track_titles(),
+    play_all(play_all),
+    stats()
+      {
     std::cout << "DJ Session System initialized: " << session_name << std::endl;
 }
 
@@ -178,38 +187,15 @@ void DJSession::simulate_dj_performance() {
         for(auto title : track_titles){
             std::cout << "\n–- Processing: " << title << " –-" << std::endl;
             stats.tracks_processed++;
-            //cache
-            //reminder: load track to controoler output: 
-            //HIT (1) 
-            //MISS (0).
-            //MISS & eviction (-1)
+            //cache loading:
             int output = load_track_to_controller(title);
-            if(output==1) { stats.cache_hits++; }
-            if(output==0) { stats.cache_misses++; }
-            if(output==-1) { 
-                stats.cache_misses++;
-                stats.cache_evictions++;
-            }
+            controller_service.displayCacheStatus();
             //deck loading:
             int result = load_track_to_mixer_deck(title);
-            if(result==0){
-                stats.deck_loads_a++;
-                stats.transitions++;
-            }
-            if(result==1){
-                stats.deck_loads_b++;
-                stats.transitions++;
-            }
+            mixing_service.displayDeckStatus();
+
         }
         print_session_summary();
-        stats.tracks_processed = 0;
-        stats.cache_hits = 0;
-        stats.cache_misses = 0;
-        stats.cache_evictions = 0;
-        stats.deck_loads_a = 0;
-        stats.deck_loads_b = 0;
-        stats.transitions = 0;
-        stats.errors = 0;
     }
 
 
