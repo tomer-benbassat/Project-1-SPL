@@ -187,11 +187,17 @@ int main(int argc, char* argv[]) {
         std::cout << "==================================================" << std::endl;
         
         //Test each phase individually
-       test_phase_1_memory_leaks();
-        test_phase_2_rule_of_5();
-       test_phase_3();
-        demonstrate_polymorphism();
+       //test_phase_1_memory_leaks();
+      //  test_phase_2_rule_of_5();
+      // test_phase_3();
+      //  demonstrate_polymorphism();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
+       DJSession live_session("play all Session", true);
+
+      live_session.simulate_dj_performance();
     }
     return 0;
 }
+
+
+

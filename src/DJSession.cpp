@@ -158,6 +158,9 @@ void DJSession::simulate_dj_performance() {
         for(const auto& pair : session_config.playlists){ //extraction
             extracted_titles.push_back(pair.first);
         }
+        //sort
+        //begin and end returns pointers to first and last strings in our vector of playlists names and sort it
+        std::sort(extracted_titles.begin(),extracted_titles.end());
         for(size_t i=0;i<extracted_titles.size() ;i++){
             for_each_selected_playlist(extracted_titles[i]); //see helper function below
         }
@@ -188,10 +191,10 @@ void DJSession::simulate_dj_performance() {
             std::cout << "\n–- Processing: " << title << " –-" << std::endl;
             stats.tracks_processed++;
             //cache loading:
-            int output = load_track_to_controller(title);
+            load_track_to_controller(title);
             controller_service.displayCacheStatus();
             //deck loading:
-            int result = load_track_to_mixer_deck(title);
+            load_track_to_mixer_deck(title);
             mixing_service.displayDeckStatus();
 
         }
