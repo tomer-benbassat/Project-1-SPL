@@ -28,6 +28,46 @@ MixingEngineService::~MixingEngineService() {
         }
     }
 }
+//==================addition:rule of 3======================
+//copy constructor
+MixingEngineService::MixingEngineService(const MixingEngineService& other): active_deck(other.active_deck),
+      auto_sync(other.auto_sync),
+      bpm_tolerance(other.bpm_tolerance)
+{
+    for (int i = 0; i < 2; ++i) {
+        if (other.decks[i]) {
+            //only way i can deep copy is through a clone
+            decks[i] = other.decks[i]->clone().release();
+        } else {
+            decks[i] = nullptr;
+        }
+    }
+}
+
+
+//assign operator
+MixingEngineService& MixingEngineService::operator=(const MixingEngineService& other){
+    if(&other!=this){
+        //clean current decks
+        for(int i=0;i<2;i++){
+            if(decks[i]){
+                delete decks[i];
+                decks[i]=nullptr;
+            }
+        }
+        //deep copy of other's decks
+        for(int i=0;i<2;i++){
+            if(other.decks[i]){
+                decks[i] = other.decks[i]->clone().release();
+            }
+        }
+        active_deck = other.active_deck;
+        auto_sync = other.auto_sync;
+        bpm_tolerance = other.bpm_tolerance;
+    }
+    return *this;
+}
+//==================addition:rule of 3======================
 
 
 /**

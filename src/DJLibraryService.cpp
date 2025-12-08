@@ -10,7 +10,8 @@
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
     : playlist(playlist), library() {} 
 
-//==================addition:destructor======================
+//==================addition:rule of 3======================
+//destructor:
   DJLibraryService::~DJLibraryService(){
     //playlist alray has destructor
     //library
@@ -19,7 +20,37 @@ DJLibraryService::DJLibraryService(const Playlist& playlist)
     }
     //library vector deleted by default
   }
-//==================addition:destructor======================
+
+
+  //copy constructor
+  DJLibraryService::DJLibraryService(const DJLibraryService& other):playlist(other.playlist),library(){
+    for(size_t i=0;i<other.library.size();i++){
+        PointerWrapper<AudioTrack> tempTrack = other.library[i]->clone();
+        library.push_back(tempTrack.release());
+    }
+}
+
+  //assign operator
+  DJLibraryService& DJLibraryService:: operator=(const DJLibraryService& other){
+    if(&other!=this){
+        //clear
+        for(size_t i=0;i<library.size();i++){
+          delete library[i];
+        }
+        library.clear();
+        //now library is an empty vector
+        for(size_t i=0;i<other.library.size();i++){
+            PointerWrapper<AudioTrack> tempTrack = other.library[i]->clone();
+            library.push_back(tempTrack.release());
+        }
+        //use playlist assgiment operator which delocate memory
+        playlist = other.playlist; 
+    }
+    return *this;
+  }
+
+
+//==================addition:rule of 3======================
 
 /**
  * @brief Load a playlist from track indices referencing the library

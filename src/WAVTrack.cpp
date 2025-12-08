@@ -42,7 +42,7 @@ double WAVTrack::get_quality_score() const {
     //MyNote: I ignored the above notes since this method doesnt include printing or arrows....
     double score = 70.0;
     if(sample_rate >= 44100) score = score + 10.0;
-    if(sample_rate >=9600) score = score + 5.0;
+    if(sample_rate >=96000) score = score + 5.0;
     if(bit_depth >=16) score = score + 10.0;
     if(bit_depth >=24) score = score + 5.0;
     if(score>100) return 100;
