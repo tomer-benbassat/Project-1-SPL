@@ -98,7 +98,7 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
  * @return: Whether track was successfully loaded to a deck
  */
 bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
-    std::cout << "[System] Delegating track transfer to MixingEngineService for: " << track_title << std::endl;
+    std::cout << "[System] Delegating track transfer to MixingEngineService for: " << track_title << "\n\n";
     AudioTrack* track = controller_service.getTrackFromCache(track_title);
     if(!track){
         std::cout << "[ERROR] Track: '" << track_title << "' not found in cache\n";

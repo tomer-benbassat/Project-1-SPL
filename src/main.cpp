@@ -163,13 +163,13 @@ int main(int argc, char* argv[]) {
      * - If "-I" is provided as the first argument, run interactive DJ software
      * - If "-A" is provided as the second argument, enable play_all mode
      */
-    bool run_software = true;
+    bool run_software = false;
     bool play_all = false;
     if (argc > 1 && std::string(argv[1]) == "-I") {
         run_software = true;
     }
 
-    if (argc > 1 && std::string(argv[1]) == "-A") {
+    if (argc > 2 && std::string(argv[2]) == "-A") {
         play_all = true;
     }
 
@@ -186,16 +186,12 @@ int main(int argc, char* argv[]) {
         std::cout << "Initially, many features will be incomplete!" << std::endl;
         std::cout << "==================================================" << std::endl;
         
-        //Test each phase individually
-       test_phase_1_memory_leaks();
-       test_phase_2_rule_of_5();
-       test_phase_3();
-       demonstrate_polymorphism();
+        // Test each phase individually
+        test_phase_1_memory_leaks();
+        test_phase_2_rule_of_5();
+        test_phase_3();
+        demonstrate_polymorphism();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
-       
     }
     return 0;
 }
-
-
-

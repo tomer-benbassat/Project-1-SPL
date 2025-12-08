@@ -12,7 +12,7 @@ MixingEngineService::MixingEngineService()
 {
     decks[0] = nullptr;
     decks[1] = nullptr;
-    std::cout << "[MixingEngineService] Initialized with 2 empty decks. \n";
+    std::cout << "[MixingEngineService] Initialized with 2 empty decks.\n";
 }
 
 /**
@@ -20,7 +20,7 @@ MixingEngineService::MixingEngineService()
  * Done
  */
 MixingEngineService::~MixingEngineService() {
-    std::cout << "[MixingEngineService] Cleaning up decks....\n";
+    std::cout << "[MixingEngineService] Cleaning up decks...\n";
     for(int i=0;i<2;i++){
         if(decks[i]){
             delete decks[i]; //that demonstarte how mixingEngine owns tracks of both decks therfore has to delete it to endure no memory leak =)
