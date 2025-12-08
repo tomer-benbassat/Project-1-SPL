@@ -21,7 +21,7 @@ Playlist::~Playlist() {
         current = next;
     }
 }
-//=========================rule of 3 addition============================ 
+//=========================rule of 5 addition============================ 
 //copy constructor
 //added it in the end. really cant find a way to implement this without PW so i find it weird they asked us this in phase 1 but fine. 
 Playlist::Playlist(const Playlist& other):head(nullptr),playlist_name(other.playlist_name),track_count(other.track_count){
@@ -56,7 +56,34 @@ Playlist& Playlist::operator=(const Playlist& other){
     }
     return *this;
 }
-//=========================rule of 3 addition============================ 
+
+//move constructor
+Playlist::Playlist(Playlist&& other) noexcept: head(other.head),playlist_name(std::move(other.playlist_name)),track_count(other.track_count){
+    other.head=nullptr;
+    other.track_count=0;
+}
+
+//move assigment
+Playlist& Playlist::operator=(Playlist&& other) noexcept{
+        if(this!=&other){
+        playlist_name = std::move(other.playlist_name);
+        track_count = other.track_count;
+        //clear:
+        while(head){
+            PlaylistNode* to_delete = head;
+            head = head->next;
+            delete to_delete->track;
+            delete to_delete;
+        }
+        //steal
+        head=other.head;
+        //reset other
+        other.head=nullptr;
+        other.track_count=0;
+    }
+    return *this;
+}
+//=========================rule of 5 addition============================ 
 
 void Playlist::add_track(AudioTrack* track) {
     if (!track) {

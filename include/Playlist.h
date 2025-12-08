@@ -40,19 +40,23 @@ public:
      */
     ~Playlist();
 
-//=========================rule of 3 addition============================   
+//=========================rule of 5 addition============================   
 //important since in phase 4 ->djLibrary->loadplaylistfromindices we assign playlist 
-//in this assigment there is no use to move semnatics since we assign playlist once and using lvalue
-    /**
-     * Copy Constructor
-     */
+//rule of 5 since playlist is an object that it make sense to copy and move semantics can optimize
+
+    //
     Playlist(const Playlist& other);
-     
-    /**
-     * Assigment Operator
-     */
+    
+     //Assigment Operator
     Playlist& operator=(const Playlist& other);
-//=========================rule of 3 addition============================     
+
+    //move constructor
+    Playlist(Playlist&& other) noexcept;
+
+    //move assigment
+     Playlist& operator=(Playlist&& other) noexcept;
+
+//=========================rule of 5 addition============================     
 
     /**
      * Add a track to the playlist
