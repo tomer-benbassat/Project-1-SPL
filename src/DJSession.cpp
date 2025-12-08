@@ -78,7 +78,7 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
         stats.errors ++;
         return 0;
     }
-    std::cout << "[System] Loading track: '"<< track_name << "' to controller...\n";
+    std::cout << "[System] Loading track '"<< track_name << "' to controller...\n";
     int output = controller_service.loadTrackToCache(*track);
     if(output==1) { stats.cache_hits++; }
     if(output==0) { stats.cache_misses++; }
@@ -119,7 +119,6 @@ bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
         stats.errors ++;
         return false;
     }
-    std::cout << "[System] Track: '" << track_title << "' successfully loaded to deck: "<< output << "\n";
     return true;
 }
 
@@ -158,7 +157,7 @@ void DJSession::simulate_dj_performance() {
         for(const auto& pair : session_config.playlists){ //extraction
             extracted_titles.push_back(pair.first);
         }
-        //sort
+        //sort playlists names
         //begin and end returns pointers to first and last strings in our vector of playlists names and sort it
         std::sort(extracted_titles.begin(),extracted_titles.end());
         for(size_t i=0;i<extracted_titles.size() ;i++){
@@ -187,8 +186,12 @@ void DJSession::simulate_dj_performance() {
             std::cout << "[ERROR]: load playliat: '"<< playlist_title << "' failed" << std::endl;
             return;
         }
+        //change tracks order
+        //we need it bc while build playlist we change order since adding in playlist add to the head of LL
+        std::reverse(track_titles.begin(),track_titles.end());
+        
         for(auto title : track_titles){
-            std::cout << "\n–- Processing: " << title << " –-" << std::endl;
+            std::cout << "\n--- Processing: " << title << " ---" << std::endl;
             stats.tracks_processed++;
             //cache loading:
             load_track_to_controller(title);

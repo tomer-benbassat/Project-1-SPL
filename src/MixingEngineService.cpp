@@ -46,15 +46,13 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
         return -1;
     }
     int target_deck;
-    bool is_first_load = false;
     if(!decks[0]&&!decks[1]){ //first
         target_deck=0;
-        is_first_load = true;
     }
     else{//subsequent
      target_deck = 1-active_deck;
     }
-    std::cout << "[Deck Switch] Target deck:" << target_deck << "\n";
+    std::cout << "[Deck Switch] Target deck: " << target_deck << "\n";
     if(decks[target_deck]){
         delete decks[target_deck];
         decks[target_deck] = nullptr;
@@ -67,12 +65,7 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     //important line below!
     //release clone ownership from PW and transfer it to decks@
     decks[target_deck] = clone.release(); 
-    std::cout << "[Load Complete]: '" << track.get_title() << "' is now loaded on deck" << target_deck << "\n";
-    if(decks[active_deck]&&!is_first_load){
-        std::cout<< "[Unload]: Unloading previous deck" << active_deck << " " << decks[active_deck]->get_title() << "\n";
-        delete decks[active_deck];
-        decks[active_deck] = nullptr;
-    }
+    std::cout << "[Load Complete] '" << track.get_title() << "' is now loaded on deck " << target_deck << "\n";
     active_deck = target_deck;
     std::cout << "[Active Deck] Switched to deck " << target_deck << "\n";
     return target_deck;
@@ -120,7 +113,12 @@ void MixingEngineService::sync_bpm(const PointerWrapper<AudioTrack>& track) cons
     if(decks[active_deck]&&track){
         int new_bpm = ((original_bpm + active_deck_bpm)/2);
         track->set_bpm(new_bpm);
-        std::cout << "[Sync BPM] Syncing BPM from "<< original_bpm << "to" << new_bpm << "\n";
+        std::cout << "[Sync BPM] Syncing BPM from "<< original_bpm << " to " << new_bpm << "\n";
+    }
+    else{
+        //added only to match the given output.....
+        if(!decks[0] || !decks[1])
+        std::cout << "[Sync BPM] Cannot sync - one of the decks is empty.";
     }
 }
 

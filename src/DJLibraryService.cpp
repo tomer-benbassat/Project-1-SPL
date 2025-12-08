@@ -17,7 +17,7 @@ DJLibraryService::DJLibraryService(const Playlist& playlist)
     for(size_t i=0;i<library.size();i++){
         delete library[i];
     }
-    //library vector seleted by default
+    //library vector deleted by default
   }
 //==================addition:destructor======================
 
@@ -38,7 +38,7 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
             library.push_back(new WAVTrack(current_info.title,current_info.artists, current_info.duration_seconds,current_info.bpm, current_info.extra_param1, current_info.extra_param2));
         }
     }
-    std::cout << "[INFO] Track library built: " << library.size() << "tracks loaded\n";
+    std::cout << "[INFO] Track library built: " << library.size() << " tracks loaded\n";
 }
 
 
@@ -88,7 +88,7 @@ AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
 //*********************Did it at 5AM so its better to test it well**************** 
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
-   std::cout << "[INFO] Loading playlist:" << playlist_name << "\n";
+   std::cout << "[INFO] Loading playlist: " << playlist_name << "\n";
    playlist = Playlist(playlist_name);
    for(size_t i=0;i< track_indices.size();i++){
         size_t index = track_indices[i];
@@ -105,11 +105,12 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
            clone->analyze_beatgrid();
            //unwrap and transfer ownership
           playlist.add_track(clone.release());
-         std:: cout << "Added '" << library[index-1]->get_title()<< "' to playlist '" << playlist_name << "' \n";
+          //double printing - MP3
+         //std:: cout << "Added '" << library[index-1]->get_title()<< "' to playlist '" << playlist_name << "' \n"; 
         }
       }
   } 
-   std::cout << "[INFO] Playlist loaded: '" << playlist_name << "' "<< playlist.get_track_count() << "tracks\n";
+   std::cout << "[INFO] Playlist loaded: " << playlist_name << " ("<< playlist.get_track_count() << " tracks)\n";
 }
 
 
