@@ -183,7 +183,7 @@ void DJSession::simulate_dj_performance() {
  //the function operates phase4,7.3.4 -> 4.(c) aka all the operations we need to do for each playlist aka load it to all services
     void DJSession:: for_each_selected_playlist(const std::string& playlist_title){
         if(!load_playlist(playlist_title)){
-            std::cout << "[ERROR]: load playliat: '"<< playlist_title << "' failed" << std::endl;
+            std::cout << "[ERROR] load playliat: '"<< playlist_title << "' failed" << std::endl;
             return;
         }
         //change tracks order

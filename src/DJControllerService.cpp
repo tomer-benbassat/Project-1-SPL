@@ -20,9 +20,7 @@ int DJControllerService::loadTrackToCache(AudioTrack& track) {
         //clone returns pointerWrapper
         PointerWrapper<AudioTrack> clone = track.clone();
         if(!clone){
-            //I wrote the error from the assigment forum.
-            //in the instructions they say to print: "[ERROR] Track: "<title>" failed to clone", i feel like its the same
-            std::cout << "[DJControllerService] Error: Track cloning failed for" << track.get_title() << std::endl;
+            std::cout << "[ERROR] Track: " << track.get_title() << " failed to clone" << std::endl;
             return 0;
         }
         clone->load();
